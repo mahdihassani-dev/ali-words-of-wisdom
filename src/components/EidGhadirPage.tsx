@@ -14,24 +14,17 @@ const EidGhadirPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showHadith, setShowHadith] = useState(false);
 
-  const fetchHadith = async (maxTries = 10): Promise<Hadith> => {
-    for (let i = 0; i < maxTries; i++) {
-      try {
-        console.log(`Attempting to fetch hadith, try ${i + 1}/${maxTries}`);
-        const res = await fetch("https://api.keybit.ir/hadis");
-        const data = await res.json();
-        
-        console.log('API Response:', data);
-        
-        if (data?.result?.person?.includes("امام علی")) {
-          console.log('Found hadith from Imam Ali:', data.result);
-          return data.result;
-        }
-      } catch (error) {
-        console.error(`Error on try ${i + 1}:`, error);
-      }
+  const fetchHadith = async (): Promise<Hadith> => {
+    console.log('Fetching hadith from API...');
+    const res = await fetch("https://api.keybit.ir/hadis");
+    const data = await res.json();
+    
+    console.log('API Response:', data);
+    
+    if (data?.result) {
+      return data.result;
     }
-    throw new Error("حدیثی از امام علی پیدا نشد.");
+    throw new Error("دریافت حدیث با مشکل مواجه شد");
   };
 
   const handleScrollClick = async () => {
@@ -47,7 +40,7 @@ const EidGhadirPage = () => {
       toast.success('حدیث جدیدی دریافت شد');
     } catch (error) {
       console.error('Error fetching hadith:', error);
-      toast.error('خطا در دریافت حدیث. لطفاً دوباره تلاش کنید.');
+      toast.error('دریافت حدیث با مشکل مواجه شد. لطفاً دوباره تلاش کنید.');
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +55,7 @@ const EidGhadirPage = () => {
             عید غدیر خم مبارک
           </h1>
           <h2 className="text-2xl md:text-3xl text-manuscript-800 persian-text font-medium">
-            حدیثی از مولا علی علیه‌السلام
+            حدیثی از بزرگان اسلام
           </h2>
         </div>
 
