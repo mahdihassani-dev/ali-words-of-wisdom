@@ -18,7 +18,7 @@ const EidGhadirPage = () => {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const fetchHadith = async (): Promise<Hadith> => {
-    const response = await fetch('http://127.0.0.1:8002/api/hadith/random/');
+    const response = await fetch('/api/hadith/random/');
     if (!response.ok) throw new Error("دریافت حدیث با مشکل مواجه شد");
     const data = await response.json();
     if (data?.text && data?.person) return data;
