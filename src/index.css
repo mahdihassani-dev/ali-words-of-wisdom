@@ -1,38 +1,41 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Vazir:wght@300;400;500;600;700&display=swap');
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 35 25% 95%;
+    --foreground: 30 15% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 35 25% 98%;
+    --card-foreground: 30 15% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 35 25% 98%;
+    --popover-foreground: 30 15% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 36 45% 50%;
+    --primary-foreground: 0 0% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 35 20% 90%;
+    --secondary-foreground: 30 15% 15%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 35 20% 90%;
+    --muted-foreground: 30 10% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 36 45% 85%;
+    --accent-foreground: 30 15% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 35 25% 85%;
+    --input: 35 25% 85%;
+    --ring: 36 45% 50%;
 
     --radius: 0.5rem;
 
@@ -98,6 +101,76 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-persian;
+    direction: rtl;
   }
+
+  html {
+    direction: rtl;
+  }
+}
+
+/* Persian text styling */
+.persian-text {
+  font-family: 'Vazir', 'Sahel', 'Tanha', serif;
+  direction: rtl;
+  text-align: right;
+  line-height: 2;
+}
+
+/* Manuscript background pattern */
+.manuscript-bg {
+  background: linear-gradient(135deg, #fdfbf7 0%, #f9f5ed 25%, #f1e8d3 50%, #e7d7b3 75%, #d9c088 100%);
+  position: relative;
+}
+
+.manuscript-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(207, 169, 95, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(184, 146, 74, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 80%, rgba(157, 121, 57, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+/* Islamic ornamental border */
+.islamic-border {
+  position: relative;
+  border: 2px solid #cfa95f;
+  border-radius: 8px;
+}
+
+.islamic-border::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -4px;
+  right: -4px;
+  bottom: -4px;
+  border: 1px solid rgba(207, 169, 95, 0.3);
+  border-radius: 12px;
+  pointer-events: none;
+}
+
+/* Scroll/Letter styling */
+.ancient-scroll {
+  background: linear-gradient(145deg, #f9f5ed, #e7d7b3);
+  border: 3px solid #cfa95f;
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.1),
+    inset 0 1px 3px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.ancient-scroll:hover {
+  transform: translateY(-2px) rotate(1deg);
+  box-shadow: 
+    0 15px 40px rgba(0, 0, 0, 0.15),
+    inset 0 1px 3px rgba(255, 255, 255, 0.3),
+    inset 0 -1px 3px rgba(0, 0, 0, 0.1);
 }
