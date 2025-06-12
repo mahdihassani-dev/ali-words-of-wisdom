@@ -1,7 +1,13 @@
+
 import React, { useState } from 'react';
 import { ScrollText, Loader2, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-import { getRandomHadith, type Hadith } from '@/data/hadiths';
+
+interface Hadith {
+  person: string;
+  text: string;
+  source: string;
+}
 
 const EidGhadirPage = () => {
   const [currentHadith, setCurrentHadith] = useState<Hadith | null>(null);
@@ -9,12 +15,26 @@ const EidGhadirPage = () => {
   const [showHadith, setShowHadith] = useState(false);
 
   const fetchHadith = async (): Promise<Hadith> => {
-    console.log('Fetching hadith from local collection...');
-    // Simulate API delay for better UX
-    await new Promise(resolve => setTimeout(resolve, 500));
-    const hadith = getRandomHadith();
-    console.log('Selected hadith:', hadith);
-    return hadith;
+    console.log('Fetching hadith from API...');
+    // Using CORS proxy to bypass CORS restrictions
+    const proxyUrl = 'https://api.allorigins.win/get?url=';
+    const targetUrl = encodeURIComponent('https://api.keybit.ir/hadis');
+    const fullUrl = proxyUrl + targetUrl;
+    
+    const res = await fetch(fullUrl);
+    const proxyData = await res.json();
+    
+    if (!proxyData.contents) {
+      throw new Error("دریافت حدیث با مشکل مواجه شد");
+    }
+    
+    const data = JSON.parse(proxyData.contents);
+    console.log('API Response:', data);
+    
+    if (data?.result) {
+      return data.result;
+    }
+    throw new Error("دریافت حدیث با مشکل مواجه شد");
   };
 
   const handleScrollClick = async () => {
