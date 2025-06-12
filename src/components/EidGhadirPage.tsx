@@ -1,13 +1,7 @@
-
 import React, { useState } from 'react';
 import { ScrollText, Loader2, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-
-interface Hadith {
-  person: string;
-  text: string;
-  source: string;
-}
+import { getRandomHadith, type Hadith } from '@/data/hadiths';
 
 const EidGhadirPage = () => {
   const [currentHadith, setCurrentHadith] = useState<Hadith | null>(null);
@@ -15,16 +9,12 @@ const EidGhadirPage = () => {
   const [showHadith, setShowHadith] = useState(false);
 
   const fetchHadith = async (): Promise<Hadith> => {
-    console.log('Fetching hadith from API...');
-    const res = await fetch("https://api.keybit.ir/hadis");
-    const data = await res.json();
-    
-    console.log('API Response:', data);
-    
-    if (data?.result) {
-      return data.result;
-    }
-    throw new Error("دریافت حدیث با مشکل مواجه شد");
+    console.log('Fetching hadith from local collection...');
+    // Simulate API delay for better UX
+    await new Promise(resolve => setTimeout(resolve, 500));
+    const hadith = getRandomHadith();
+    console.log('Selected hadith:', hadith);
+    return hadith;
   };
 
   const handleScrollClick = async () => {
