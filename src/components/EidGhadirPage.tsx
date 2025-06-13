@@ -89,8 +89,7 @@ const EidGhadirPage = () => {
 
 "${currentHadith?.text || ''}"
 
-تو هم یک حدیث بخوان :‌
-${window.location.href}`;
+تو هم یک حدیث بخوان :‌`;
 
     const shareData = {
       title: 'حدیثی از حضرت علی علیه‌السلام',
