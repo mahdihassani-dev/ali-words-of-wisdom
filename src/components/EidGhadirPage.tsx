@@ -1,6 +1,8 @@
 import React, { useState, useRef } from 'react';
 import { ScrollText, Loader2, RefreshCw, PauseCircle, PlayCircle, Share2 } from 'lucide-react';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
+
 
 interface Hadith {
   person: string;
@@ -16,6 +18,15 @@ const EidGhadirPage = () => {
   const [pausedManually, setPausedManually] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const hadithRef = useRef<HTMLDivElement | null>(null); // ✅ برای اسکرول ملایم
+
+
+  useEffect(() => {
+  const audio = audioRef.current;
+  if (audio) {
+    audio.volume = 0.2; // تنظیم صدا روی ۲۰٪
+  }
+}, []);
 
   const fetchHadith = async (): Promise<Hadith> => {
     const response = await fetch('https://ketabbaan.ir/api/hadith/random/');
@@ -29,12 +40,14 @@ const EidGhadirPage = () => {
     if (isLoading) return;
 
     setIsLoading(true);
-    setShowHadith(false);
+    setShowHadith(false); // برای fade-out
 
     try {
       const hadith = await fetchHadith();
       setCurrentHadith(hadith);
-      setShowHadith(true);
+
+      setTimeout(() => setShowHadith(true), 100); // کمی تأخیر برای fade-in
+
       toast.success('حدیث جدیدی دریافت شد');
 
       const audio = audioRef.current;
@@ -42,6 +55,11 @@ const EidGhadirPage = () => {
         await audio.play();
         setIsAudioPlaying(true);
       }
+
+      // ✅ اسکرول ملایم فقط به بخش حدیث، نه بالا
+      setTimeout(() => {
+        hadithRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 200);
     } catch (error) {
       console.error('Error fetching hadith:', error);
       toast.error('دریافت حدیث با مشکل مواجه شد. لطفاً دوباره تلاش کنید.');
@@ -66,9 +84,17 @@ const EidGhadirPage = () => {
   };
 
   const handleShare = async () => {
+    const shareText = `به مناسبت عید غدیر 🌿
+روحت را با حدیثی از مولای متقیان سیراب کن:
+
+"${currentHadith?.text || ''}"
+
+تو هم یک حدیث بخوان :‌
+${window.location.href}`;
+
     const shareData = {
       title: 'حدیثی از حضرت علی علیه‌السلام',
-      text: currentHadith?.text || 'حدیثی زیبا از امام علی',
+      text: shareText,
       url: window.location.href,
     };
 
@@ -81,10 +107,10 @@ const EidGhadirPage = () => {
       }
     } else {
       try {
-        await navigator.clipboard.writeText(shareData.url);
-        toast.success('لینک کپی شد');
+        await navigator.clipboard.writeText(shareText);
+        toast.success('متن در کلیپ‌بورد کپی شد');
       } catch (err) {
-        toast.error('کپی لینک ناموفق بود');
+        toast.error('کپی متن ناموفق بود');
       }
     }
   };
@@ -143,7 +169,10 @@ const EidGhadirPage = () => {
 
           {/* Hadith Display */}
           {showHadith && currentHadith && (
-            <div className="w-full max-w-3xl animate-fade-in relative">
+            <div
+              ref={hadithRef}
+              className="w-full max-w-3xl transition-opacity duration-500 ease-in-out opacity-100 animate-fade-in relative"
+            >
               {/* Audio Control Button */}
               <div className="absolute top-4 left-4 z-10">
                 <button
@@ -213,10 +242,10 @@ const EidGhadirPage = () => {
         {/* Footer */}
         <div className="mt-16 text-center">
           <p className="text-sm md:text-base text-manuscript-600 persian-text opacity-80">
-            "من مدینة العلم و علی بابها"
+            "أنا مدینة العلم و علی بابها"
           </p>
           <p className="text-xs md:text-sm text-manuscript-500 persian-text mt-2">
-            به مناسبت عید غدیر خم - ولایت حضرت علی علیه‌السلام
+            من شهر علم هستم و علی دروازه آن
           </p>
         </div>
       </div>
